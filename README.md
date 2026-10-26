@@ -5,17 +5,15 @@ A high-performance, enterprise-grade Retrieval-Augmented Generation (RAG) system
 ---
 
 ## 🏗️ Architecture & System Design
-[ React Frontend ]
-│
-▼ (Async Upload / Job Submission)
-[ Express.js API Gateway (Producer) ] ──► [ Redis + BullMQ Queue ]
-│                                              │
-▼                                              ▼ (Background Job)
-[ Immediate 202 Response ]                    [ Worker Node ]
-│
-├──► Extract & Chunk PDF (LangChain)
-├──► Generate Vector Embeddings
-└──► Local LLM Inference (Ollama - phi3)
+```mermaid
+graph LR
+    A[React Frontend] -->|Async Upload| B[Express.js API Gateway]
+    B -->|Push Job| C[(Redis + BullMQ Queue)]
+    B -->|Return 202 Accepted| A
+    C -->|Process Background Job| D[Worker Node]
+    D --> E[Extract & Chunk PDF]
+    D --> F[Generate Vector Embeddings]
+    D --> G[Local LLM Inference - phi3]
 
 ---
 
