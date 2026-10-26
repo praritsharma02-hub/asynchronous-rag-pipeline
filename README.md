@@ -5,18 +5,11 @@ A high-performance, enterprise-grade Retrieval-Augmented Generation (RAG) system
 ---
 
 ## 🏗️ Architecture & System Design
-┌──────────────────┐      ┌─────────────────────────┐      ┌───────────────────────┐
-│  React Frontend  │ ───► │ Express.js API Gateway  │ ───► │  Redis + BullMQ Queue │
-└──────────────────┘      └─────────────────────────┘      └───────────────────────┘
-                                                │
-                                                ▼ (Background Job)
-                                  ┌─────────────────────────┐
-                                  │       Worker Node       │
-                                  ├─────────────────────────┤
-                                  │ • Extract & Chunk PDF   │
-                                  │ • Generate Embeddings   │
-                                  │ • Ollama (phi3) Local   │
-                                  └─────────────────────────┘
+
+- **1. Frontend Request:** React Frontend initiates an asynchronous PDF upload to the backend.
+- **2. API Gateway (Producer):** Express.js receives the request, instantly returns a `202 Accepted` receipt to prevent blocking, and pushes a job to the queue.
+- **3. Queue Layer:** Redis + BullMQ manages and distributes the background ingestion tasks securely.
+- **4. Worker Node (Consumer):** Background worker picks up the job, performs PDF text extraction and chunking via LangChain, generates vector embeddings, and executes local LLM inference using Ollama (`phi3`).
 
 ---
 
