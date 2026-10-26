@@ -14,9 +14,8 @@ graph LR
     D --> E[Extract & Chunk PDF]
     D --> F[Generate Vector Embeddings]
     D --> G[Local LLM Inference - phi3]
-
+    ```
 ---
-
 ## ✨ Key Features
 
 * **Asynchronous Queue Architecture:** Utilizes **BullMQ** & **Redis** to offload PDF ingestion to background workers.
